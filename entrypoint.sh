@@ -23,13 +23,10 @@ else
   chia keys add -f ${keys}
 fi
 
-for p in ${plots_dir//:/ }; do
-    mkdir -p ${p}
-    if [[ ! "$(ls -A $p)" ]]; then
-        echo "Plots directory '${p}' appears to be empty, try mounting a plot directory with the docker -v command"
-    fi
-    chia plots add -d ${p}
-done
+if [[ ! "$(ls -A $p)" ]]; then
+    echo "Plots directory '${p}' appears to be empty, try mounting a plot directory with the docker -v command"
+    exit
+fi
 
 sed -i 's/localhost/127.0.0.1/g' ~/.chia/mainnet/config/config.yaml
 # use DEBUG as default log_level
