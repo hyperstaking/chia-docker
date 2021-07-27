@@ -28,6 +28,9 @@ if [[ ! "$(ls -A $p)" ]]; then
     exit
 fi
 
+# original cmd, without recursive search for plots. chia plots add -d ${plots_dir}
+find ${plots_dir} -iname "*.plot" -type f | xargs -n 1 -I[] dirname [] | grep -v "Trash" | sort --unique | xargs -n 1 -I[] chia plots add -d []
+
 sed -i 's/localhost/127.0.0.1/g' ~/.chia/mainnet/config/config.yaml
 # use DEBUG as default log_level
 sed -i 's/log_level: WARNING/log_level: DEBUG/g' /root/.chia/mainnet/config/config.yaml
@@ -53,8 +56,5 @@ if [[ ${testnet} == "true" ]]; then
     chia configure --set-fullnode-port ${var.full_node_port}
   fi
 fi
-
-# original cmd, without recursive search for plots. chia plots add -d ${plots_dir}
-find ${plots_dir} -iname "*.plot" -type f | xargs -n 1 -I[] dirname [] | grep -v "Trash" | sort --unique | xargs -n 1 -I[] chia plots add -d []
 
 while true; do sleep 30; done;
