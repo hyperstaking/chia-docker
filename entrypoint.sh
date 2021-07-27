@@ -31,6 +31,9 @@ for p in ${plots_dir//:/ }; do
     chia plots add -d ${p}
 done
 
+# original cmd, without recursive search for plots. chia plots add -d ${plots_dir}
+find ${plots_dir} -iname "*.plot" -type f | xargs -n 1 -I[] dirname [] | grep -v "Trash" | sort --unique | xargs -n 1 -I[] chia plots add -d []
+
 sed -i 's/localhost/127.0.0.1/g' ~/.chia/mainnet/config/config.yaml
 
 if [[ ${farmer} == 'true' ]]; then
